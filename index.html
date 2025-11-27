@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Eugenes flip a coin!</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:linear-gradient(135deg,#f8fafc,#eef2ff);}
+.card{background:white;padding:28px;border-radius:18px;box-shadow:0 10px 30px rgba(16,24,40,0.08);width:360px;text-align:center}
+h1{margin:0 0 8px;font-size:20px}
+p.tutorial{font-size:14px;color:#374151;margin:6px 0 18px}
+.coin-wrap{perspective:900px;height:140px;display:flex;align-items:center;justify-content:center}
+.coin{width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;background:conic-gradient(#ffd54f,#f59e0b);box-shadow:inset 0 -6px 12px rgba(0,0,0,0.08);transition:transform 1s;transform-style:preserve-3d}
+.coin .face{position:absolute;backface-visibility:hidden}
+.coin .back{transform:rotateY(180deg)}
+.controls{margin-top:18px;display:flex;gap:10px;justify-content:center}
+button{padding:10px 14px;border-radius:10px;border:0;background:#4f46e5;color:white;font-weight:600;cursor:pointer}
+button.secondary{background:#e5e7eb;color:#111}
+.result{margin-top:14px;font-size:16px}
+.choice{margin-top:8px;font-weight:700}
+footer{font-size:12px;color:#6b7280;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>Welcome to Eugenes flip a coin!</h1>
+<p class="tutorial">If we cannot decide which kahoot to do, we can choose from Robot run, Color Kingdoms, And the Tallest Tower.</p>
+<p class="disclaimer"><strong>DISCLAIMER:</strong> Robot Run is a 45% chance, Color Kingdoms 20%, and The Tallest Tower 39%.</p>
+
+
+<div class="coin-wrap">
+<div id="coin" class="coin">
+<div class="face front">🎲</div>
+</div>
+</div>
+
+
+<div class="controls">
+<button id="chooseBtn">Pick a Kahoot</button>
+</div>
+
+
+<div class="result" id="resultArea">Press "Pick a Kahoot" to begin.</div>
+</div>
+
+
+<script>
+const chooseBtn = document.getElementById('chooseBtn');
+const resultArea = document.getElementById('resultArea');
+const coin = document.getElementById('coin');
+
+
+const kahoots = [
+{ name: 'Robot Run', weight: 45 },
+{ name: 'Color Kingdoms', weight: 20 },
+{ name: 'The Tallest Tower', weight: 39 }
+];
+
+
+function weightedRandomPick(options) {
+let total = options.reduce((sum, o) => sum + o.weight, 0);
+let r = Math.random() * total;
+let accum = 0;
+for (let o of options) {
+accum += o.weight;
+if (r < accum) return o.name;
+}
+}
+
+
+chooseBtn.addEventListener('click', () => {
+coin.style.transition = 'transform 0.6s ease';
+coin.style.transform = 'rotateY(360deg)';
+
+
+setTimeout(() => {
+coin.style.transform = 'rotateY(0deg)';
+const pick = weightedRandomPick(kahoots);
+resultArea.textContent = `Selected: ${pick}`;
+}, 600);
+});
+</script>
+</body>
+</html>
